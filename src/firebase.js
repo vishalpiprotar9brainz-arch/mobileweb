@@ -194,11 +194,20 @@ const subscribeMock = (collectionName, callback) => {
     callback(e.detail);
   };
   
+  const handleStorage = (e) => {
+    if (e.key === `firebase_mock_${collectionName}`) {
+      const newData = e.newValue ? JSON.parse(e.newValue) : [];
+      callback(newData);
+    }
+  };
+  
   window.addEventListener(`firebase-mock-sync-${collectionName}`, handleSync);
+  window.addEventListener('storage', handleStorage);
   
   return () => {
     mockListeners[collectionName].delete(callback);
     window.removeEventListener(`firebase-mock-sync-${collectionName}`, handleSync);
+    window.removeEventListener('storage', handleStorage);
   };
 };
 
