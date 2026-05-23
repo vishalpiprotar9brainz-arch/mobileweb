@@ -865,9 +865,25 @@ export const authService = {
         throw err;
       }
     } else {
-      // Security Enforcement: Mock authentication is disabled in production builds.
-      // All authentication must use real Firebase Auth (signInWithEmailAndPassword).
-      throw new Error("Mock authentication is disabled. Please configure real Firebase credentials in .env to login.");
+      // Temporary Local Testing Mock Credentials restored for user testing
+      if (email === 'admin@store.com' && password === 'admin123') {
+        const mockUser = { email: 'admin@store.com', uid: 'mock-admin-uid-123' };
+        
+        localStorage.setItem('firebase_mock_active_admin_session', JSON.stringify({
+          sessionId,
+          email,
+          loginTime: Date.now(),
+          lastActive: Date.now()
+        }));
+        
+        setMockUser(mockUser);
+        
+        window.dispatchEvent(new CustomEvent('firebase-mock-sync-session', { detail: sessionId }));
+        return mockUser;
+      } else {
+        sessionStorage.removeItem('admin_session_id');
+        throw new Error("Invalid admin credentials. (Hint: Use admin@store.com / admin123)");
+      }
     }
   },
 
