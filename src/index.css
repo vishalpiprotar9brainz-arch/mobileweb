@@ -1,0 +1,157 @@
+/*
+ * ─────────────────────────────────────────────────────────────────────────────
+ * GOOGLE FONTS
+ *   English   → Poppins (300 / 400 / 500 / 600 / 700 / 800 / 900)
+ *   Gujarati  → Hind Vadodara (300 / 400 / 500 / 600 / 700)
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Hind+Vadodara:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * TAILWIND DESIGN TOKENS
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+@theme {
+  --font-sans:    'Poppins', sans-serif;
+  --font-heading: 'Poppins', sans-serif;
+
+  /* Brand palette */
+  --color-brand-primary:   #6366f1;
+  --color-brand-secondary: #0ea5e9;
+  --color-brand-accent:    #f59e0b;
+
+  /* Dark surfaces */
+  --color-dark-bg:      #090d16;
+  --color-dark-surface: #111827;
+  --color-dark-border:  #1f2937;
+  --color-dark-text:    #f3f4f6;
+  --color-dark-muted:   #9ca3af;
+
+  /* Light surfaces */
+  --color-light-bg:      #f8fafc;
+  --color-light-surface: #ffffff;
+  --color-light-border:  #e2e8f0;
+  --color-light-text:    #0f172a;
+  --color-light-muted:   #64748b;
+
+  /* Animations */
+  --animate-float:      float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-shimmer:    shimmer 2.5s infinite linear;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * KEYFRAMES
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * GLOBAL DEFAULTS
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  scroll-behavior: smooth;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * LANGUAGE-BASED FONT SWITCHING
+ *
+ * The AppLayout wrapper div gets .lang-en or .lang-gu based on the route.
+ * Frontend and Admin can show different fonts independently.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/* ENGLISH — Poppins */
+.lang-en {
+  font-family: 'Poppins', sans-serif;
+}
+.lang-en *:not(svg):not(path):not(circle):not(line):not(rect):not(polyline):not(g) {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* GUJARATI — Hind Vadodara */
+.lang-gu {
+  font-family: 'Hind Vadodara', sans-serif;
+  line-height: 1.75;
+}
+.lang-gu *:not(svg):not(path):not(circle):not(line):not(rect):not(polyline):not(g) {
+  font-family: 'Hind Vadodara', sans-serif;
+  line-height: 1.75;
+}
+.lang-gu h1,
+.lang-gu h2,
+.lang-gu h3,
+.lang-gu h4,
+.lang-gu h5,
+.lang-gu h6 {
+  font-family: 'Hind Vadodara', sans-serif;
+  font-weight: inherit;
+  line-height: 1.5;
+}
+
+/* Force-override helpers (for manual pinning) */
+.font-english  { font-family: 'Poppins', sans-serif !important; }
+.font-gujarati { font-family: 'Hind Vadodara', sans-serif !important; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * CUSTOM SCROLLBARS
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+.dark ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 9999px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+.dark ::-webkit-scrollbar-thumb:hover { background: #374151; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * GLASSMORPHISM
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+.glass-effect {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.dark .glass-effect {
+  background-color: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * SHIMMER LOADING SKELETON
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+.shimmer-card {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 37%, #f3f4f6 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s infinite;
+}
+.dark .shimmer-card {
+  background: linear-gradient(90deg, #1f2937 25%, #374151 37%, #1f2937 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@layer base {
+  html, body {
+    overflow-x: hidden;
+  }
+}
