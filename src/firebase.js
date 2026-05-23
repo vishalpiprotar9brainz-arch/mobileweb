@@ -24,6 +24,7 @@ import {
   uploadBytes, 
   getDownloadURL 
 } from 'firebase/storage';
+import { seedProducts, seedCategories } from './data/seedData';
 
 // 1. Detect and Validate Environment Variables
 const env = import.meta.env;
@@ -94,9 +95,9 @@ if (!useFallback) {
 // ----------------------------------------------------
 // PREMIUM SEED DATA FOR FALLBACK MODE
 // ----------------------------------------------------
-const defaultCategories = [];
+const defaultCategories = seedCategories;
 
-const defaultProducts = [];
+const defaultProducts = seedProducts;
 
 const defaultPurchases = [];
 
@@ -139,16 +140,24 @@ const seedCollection = (collectionName) => {
 };
 
 const getCollectionData = (collectionName) => {
-  if (window[`firebase_mock_in_memory_${collectionName}`]) {
-    return window[`firebase_mock_in_memory_${collectionName}`];
-  }
-  const raw = localStorage.getItem(`firebase_mock_${collectionName}`);
-  if (!raw) {
-    return seedCollection(collectionName);
-  }
   try {
-    return JSON.parse(raw);
+    // Force reset browser storage once for the new rich product data
+    const seedVersion = localStorage.getItem('firebase_seed_v3');
+    if (!seedVersion) {
+      localStorage.removeItem(`firebase_mock_products`);
+      localStorage.removeItem(`firebase_mock_categories`);
+      localStorage.setItem('firebase_seed_v3', 'true');
+      
+      if (!localStorage.getItem(`firebase_mock_${collectionName}`)) {
+         return seedCollection(collectionName);
+      }
+    }
+
+    const rawData = localStorage.getItem(`firebase_mock_${collectionName}`);
+    if (!rawData) return seedCollection(collectionName);
+    return JSON.parse(rawData);
   } catch (err) {
+    console.error(`Error parsing ${collectionName} from localStorage:`, err);
     return seedCollection(collectionName);
   }
 };
